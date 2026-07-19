@@ -22,12 +22,14 @@ from PIL import ImageFont
 
 from .base import Page
 
+FONTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "fonts")
+
 try:
     FONT_BIG = ImageFont.truetype(
-        "DejaVuSansMono-Bold.ttf", 28
+        os.path.join(FONTS_DIR, "DejaVuSansMono-Bold.ttf"), 28
     )
     FONT_SMALL = ImageFont.truetype(
-        "DejaVuSansMono.ttf", 10
+        os.path.join(FONTS_DIR, "DejaVuSansMono.ttf"), 10
     )
 except Exception:
     FONT_BIG = ImageFont.load_default()

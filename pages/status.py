@@ -7,6 +7,10 @@ Macley(kun)): icon column + PixelOperator text, IP cached for 60s,
 uptime read from /proc/uptime (psutil.boot_time() drifts after suspend/
 resume), temperature from the thermal_zone0 sysfs file.
 
+Pixel coordinates below match the original script exactly, so the right-
+aligned values (temp, mem, uptime) sit flush against their icons rather
+than being recomputed from screen width.
+
 Custom fonts are optional. Drop these into oled_dashboard/fonts/ to get
 the original icon look:
   - PixelOperator.ttf     https://www.dafont.com/pixel-operator.font
@@ -144,11 +148,13 @@ class StatusPage(Page):
         draw.rectangle((0, 0, self.width, self.height), outline=0, fill=0)
 
         if ICON_FONT is not None:
+            # Left-hand icon column
             draw.text((1, 0), ICON_WIFI, font=ICON_FONT, fill=255)
             draw.text((1, 16), ICON_CPU, font=ICON_FONT, fill=255)
-            draw.text((111, 16), ICON_TEMP, font=ICON_FONT, fill=255)
             draw.text((1, 32), ICON_MEM, font=ICON_FONT, fill=255)
             draw.text((1, 48), ICON_DISK, font=ICON_FONT, fill=255)
+            # Right-hand icons for the values that are right-aligned
+            draw.text((111, 16), ICON_TEMP, font=ICON_FONT, fill=255)
             draw.text((111, 48), ICON_TIME, font=ICON_FONT, fill=255)
             label_x = 22
         else:
@@ -162,14 +168,14 @@ class StatusPage(Page):
 
         draw.text((label_x, 0), self.ip, font=FONT, fill=255)
         draw.text((label_x, 16), f"{self.cpu:.0f}%", font=FONT, fill=255)
-        draw.text((self.width - 1, 16), f"{self.temp_c:.1f}C", font=FONT, fill=255, anchor="ra")
+        draw.text((107, 16), f"{self.temp_c:.1f}\u00b0C", font=FONT, fill=255, anchor="ra")
         draw.text((label_x, 32), f"{self.mem_pct:.0f}%", font=FONT, fill=255)
         draw.text(
-            (self.width - 1, 32),
+            (125, 32),
             f"{self.mem_used_gb:.1f}/{self.mem_total_gb:.0f}G",
             font=FONT,
             fill=255,
             anchor="ra",
         )
         draw.text((label_x, 48), f"{self.disk_pct}%", font=FONT, fill=255)
-        draw.text((self.width - 1, 48), self.uptime, font=FONT, fill=255, anchor="ra")
+        draw.text((107, 48), self.uptime, font=FONT, fill=255, anchor="ra")

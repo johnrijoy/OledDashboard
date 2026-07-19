@@ -43,9 +43,32 @@ oled_dashboard/
 │   ├── base.py       # Page interface every page implements
 │   ├── status.py      # IP / CPU / temp / mem / disk / uptime
 │   ├── eyes.py        # animated eyes
-│   └── clock.py       # time / day / date
+│   └── clock.py       # big HH:MM + blinking colon, date, location/weather
 └── fonts/            # optional: drop custom .ttf files here
 ```
+
+## Clock page / weather setup
+
+The clock shows a small date at the top, a large `HH:MM` time with a
+blinking colon and small AM/PM, and a small `<location>  morning°/night°`
+line at the bottom. Weather comes from [Open-Meteo](https://open-meteo.com)
+(free, no API key) using only the standard library (`urllib`), so there's
+no extra dependency to install.
+
+Set your location before running, either by editing the constants at the
+top of `pages/clock.py` or via environment variables:
+
+```
+export WEATHER_LOCATION_NAME="Adelaide"
+export WEATHER_LAT="-34.9285"
+export WEATHER_LON="138.6007"
+python3 main.py
+```
+
+The defaults above are just an example location -- change them to yours.
+Weather is refetched roughly every 30 minutes and cached in between; if
+the Pi has no internet connection or the request fails, the temperatures
+show as `--°/--°` instead of crashing the page.
 
 ## Adding a new page
 
@@ -86,9 +109,13 @@ Two existing implementations shaped this project:
 ## Notes
 
 - `StatusPage` refreshes its data every ~5s but stays on screen for the
-  page's full `duration` (10s), per the spec.
+  page's full `duration` (10s), per the spec. Icon and value positions
+  match the original script's pixel coordinates exactly, so the layout
+  lines up whether or not the icon font is installed.
 - `EyesPage` updates at ~10 FPS via `refresh_interval = 1/10`.
-- `ClockPage` updates once per second.
+- `ClockPage` updates twice a second so the colon blinks at 1Hz; the
+  hour/colon/minute widths are measured and summed every draw so the
+  digits never shift left/right when the colon blinks on and off.
 - The main loop ticks at ~30 FPS internally (so eye animation stays
   smooth and page switches are detected quickly), but `oled.show()` --
   the actual I2C write -- only happens on frames where a page reported

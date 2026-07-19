@@ -24,10 +24,10 @@ from .base import Page
 
 try:
     FONT_BIG = ImageFont.truetype(
-        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", 28
+        "DejaVuSansMono-Bold.ttf", 28
     )
     FONT_SMALL = ImageFont.truetype(
-        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 10
+        "DejaVuSansMono.ttf", 10
     )
 except Exception:
     FONT_BIG = ImageFont.load_default()

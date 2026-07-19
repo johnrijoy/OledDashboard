@@ -42,12 +42,12 @@ def _load_font(*candidates, size=FONT_SZ):
 
 
 FONT = _load_font(
-    os.path.join(FONTS_DIR, "PixelOperator.ttf"),
+    "PixelOperator.ttf",
     "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
 )
 
 # Icons are optional -- only used if the icon font actually loaded.
-_ICON_PATH = os.path.join(FONTS_DIR, "lineawesome-webfont.ttf")
+_ICON_PATH = "lineawesome-webfont.ttf"
 ICON_FONT = ImageFont.truetype(_ICON_PATH, FONT_SZ) if os.path.exists(_ICON_PATH) else None
 
 ICON_WIFI = chr(61931)

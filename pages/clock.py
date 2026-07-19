@@ -76,7 +76,7 @@ def fetch_weather(lat, lon, timeout=5):
 
 
 class ClockPage(Page):
-    duration = 10.0
+    duration = 20.0
     refresh_interval = 0.5  # toggles the colon at 1Hz (on 0.5s / off 0.5s)
 
     WEATHER_REFRESH_SECONDS = 30 * 60  # weather barely changes minute to minute
